@@ -4,7 +4,7 @@ close all; clear all; clc;
 addpath('A_star')
 
 % Environment map in 2D space
-pos = 10;
+pos = 40;
 xStart = 1.0;
 yStart = 1.0;
 xTarget = pos;
@@ -13,7 +13,7 @@ MAX_X = pos;
 MAX_Y = pos;
 
 map = obstacle_map(xStart, yStart, xTarget, yTarget, MAX_X, MAX_Y);
-% map = load('map.mat').map;
+% map = load('map_to_be_improved.mat').map;
 
 % Waypoint Generator Using the A*
 
@@ -28,10 +28,10 @@ map = obstacle_map(xStart, yStart, xTarget, yTarget, MAX_X, MAX_Y);
 %     visualize_map(map, path, OPEN);
 % end
 
-% run 50 times to obtain mean time
-for i = 1:50
+% run 10 times to obtain mean time elapsed
+for i = 1:10
     time_start = clock();
-    [path,OPEN] = A_star_search(map, MAX_X,MAX_Y,1,1);
+    [path,OPEN] = A_star_search(map, MAX_X,MAX_Y,1,1.1);
     time_elapsed(i) = etime(clock,time_start);
 end
 visualize_map(map, path, OPEN);
@@ -40,6 +40,10 @@ title(num2str(time_elapsed))
 plot(time_elapsed)
 mean(time_elapsed)
 max(time_elapsed)
+
+figure()
+[path,OPEN] = A_star_search(map, MAX_X,MAX_Y,0,1);
+visualize_map(map, path, OPEN);
 
 % visualize the 2D grid map
 % save map

@@ -100,15 +100,25 @@ while ~(sum(OPEN(:,1))==0)    %you have to dicide the Conditions for while loop 
                     if node_coor(1)>0 && node_coor(1) <= MAX_X && node_coor(2) >0 && node_coor(2) <= MAX_Y
                         exist_in_closed = exist_in_close(CLOSED, node_coor(1),node_coor(2));
                         exist_in_opened = exist_in_close(OPEN(:,2:3), node_coor(1),node_coor(2));
-                        if ~exist_in_closed && ~exist_in_opened
+                        if ~exist_in_closed
                             if (i == -1 && j == -1)||(i == -1 && j == 1)||(i == 1 && j == -1)||(i == 1 && j == 1)
                                 path_cost = node_to_expend(7) + 1.4142;
                             else
                                 path_cost = node_to_expend(7) + 1;
                             end
-                            h_n = distance(node_coor(1),node_coor(2),xTarget,yTarget);
-                            OPEN(OPEN_COUNT+1,:) = insert_open(node_coor(1),node_coor(2),node_to_expend(2),node_to_expend(3),h_n,path_cost,heuristic_weight*h_n+path_cost_weight*path_cost);
-                            OPEN_COUNT = OPEN_COUNT + 1;
+                            if ~exist_in_opened         % means g(m) = inf
+                                h_n = distance(node_coor(1),node_coor(2),xTarget,yTarget);
+                                OPEN(OPEN_COUNT+1,:) = insert_open(node_coor(1),node_coor(2),node_to_expend(2),node_to_expend(3),h_n,path_cost,heuristic_weight*h_n+path_cost_weight*path_cost);
+                                OPEN_COUNT = OPEN_COUNT + 1;
+                            else
+                                index_in_open = node_index(OPEN,node_coor(1),node_coor(2));
+                                if path_cost < OPEN(index_in_open,7)
+                                    OPEN(index_in_open,4) = node_to_expend(2);
+                                    OPEN(index_in_open,5) = node_to_expend(3);
+                                    OPEN(index_in_open,7) = path_cost;
+                                    OPEN(index_in_open,8) = heuristic_weight*h_n+path_cost_weight*path_cost;
+                                end
+                            end
                         end
                     end
                 end
@@ -142,6 +152,6 @@ if NoPath == 0
     end
 else
     path = [];
-    disp('no path');
+    disp('no path can be found');
 end
 end

@@ -5,7 +5,7 @@
     map(1,1) = xStart;
     map(1,2) = yStart;
     k=2;
-    obstacle_ratio = 0.35;
+    obstacle_ratio = 0.25;
     for i = 1:1:MAX_X
         for j = 1:1:MAX_Y
             if( (rand_map(i,j) < obstacle_ratio) && (i~= xStart || j~=yStart) && (i~= xTarget || j~=yTarget))
