@@ -4,7 +4,7 @@ close all; clear all; clc;
 addpath('A_star')
 
 % Environment map in 2D space
-pos = 40;
+pos = 30;
 xStart = 1.0;
 yStart = 1.0;
 xTarget = pos;
@@ -35,15 +35,26 @@ for i = 1:10
     time_elapsed(i) = etime(clock,time_start);
 end
 visualize_map(map, path, OPEN);
-fig = figure();
-title(num2str(time_elapsed))
-plot(time_elapsed)
-mean(time_elapsed)
-max(time_elapsed)
+title(['A* time elapsed: ' num2str(mean(time_elapsed))])
+% fig = figure();
+% title(num2str(time_elapsed))
+% plot(time_elapsed)
+% mean(time_elapsed)
+% max(time_elapsed)
 
+for i = 1:10
+    time_start = clock();
+    [path,OPEN] = A_star_search(map, MAX_X,MAX_Y,0,1);
+    time_elapsed(i) = etime(clock,time_start);
+end
 figure()
-[path,OPEN] = A_star_search(map, MAX_X,MAX_Y,0,1);
 visualize_map(map, path, OPEN);
+title(['Dijikstra time elapsed: ' num2str(mean(time_elapsed))])
+% fig = figure();
+% title(num2str(time_elapsed))
+% plot(time_elapsed)
+% mean(time_elapsed)
+% max(time_elapsed)
 
 % visualize the 2D grid map
 % save map
